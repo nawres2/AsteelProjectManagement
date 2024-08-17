@@ -1,0 +1,15 @@
+﻿@model AsteelProjectManagement.Models.Versions
+
+<div>
+    <p>Are you sure you want to delete this version?</p>
+</div>
+
+@using (Html.BeginForm("Delete", "Versions", FormMethod.Post, new { @class = "form-inline" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.VersionID)
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+    </div>
+}

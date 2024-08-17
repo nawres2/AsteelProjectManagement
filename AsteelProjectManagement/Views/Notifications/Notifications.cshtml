@@ -1,0 +1,30 @@
+﻿@model IEnumerable<AsteelProjectManagement.Models.Notifications>
+
+@{
+    ViewBag.Title = "Notifications";
+}
+
+<h2>Notifications</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Message</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr class="@(item.IsRead ? "read" : "unread")">
+            <td>@Html.DisplayFor(modelItem => item.Message)</td>
+            <td>@Html.DisplayFor(modelItem => item.CreatedDate)</td>
+            <td>@Html.DisplayFor(modelItem => item.Type)</td>
+            <td>
+                @Html.ActionLink("Marquer comme lu", "MarkAsRead", new { id = item.NotificationID })
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

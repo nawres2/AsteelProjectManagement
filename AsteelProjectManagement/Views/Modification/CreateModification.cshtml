@@ -1,0 +1,90 @@
+﻿@model AsteelProjectManagement.Models.ModificationRequests
+
+@{
+    ViewBag.Title = "Faire une demande de modification";
+}
+
+<h2>Faire une demande de modification</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>ModificationRequest</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProjectID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ProjectID, (SelectList)ViewBag.ProjectID, "Select Project", new { @class = "form-control", @id = "ProjectID" })
+                @Html.ValidationMessageFor(model => model.ProjectID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.VersionID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.VersionID, Enumerable.Empty<SelectListItem>(), "Select Version", new { @class = "form-control", @id = "VersionID" })
+                @Html.ValidationMessageFor(model => model.VersionID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.RequesterID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.RequesterID, (SelectList)ViewBag.RequesterID, "Select Requester", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.RequesterID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ReviewedBy, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ReviewedBy, (SelectList)ViewBag.ReviewedBy, "Select Reviewer", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ReviewedBy, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = 5 })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Soumettre" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Retour à la liste", "Index", "Projects")
+</div>
+
+@section scripts {
+    <script src="~/Scripts/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#ProjectID').change(function () {
+                var projectId = $(this).val();
+                if (projectId) {
+                    $.getJSON('@Url.Action("GetVersionsByProject")', { projectId: projectId }, function (data) {
+                        var items = '<option>Select Version</option>';
+                        $.each(data, function (i, version) {
+                            items += "<option value='" + version.VersionID + "'>" + version.VersionNumber + "</option>";
+                        });
+                        $('#VersionID').html(items);
+                    });
+                } else {
+                    $('#VersionID').html('<option>Select Version</option>');
+                }
+            });
+        });
+    </script>
+}

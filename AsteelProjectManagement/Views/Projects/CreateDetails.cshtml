@@ -1,0 +1,80 @@
+﻿@model AsteelProjectManagement.Models.ProjectViewModel
+
+
+
+<div class="project-details">
+    <fieldset class="styled-fieldset">
+        <legend class="styled-legend">Project Details</legend>
+
+        <div class="form-group">
+            <label for="ProjectName" class="styled-label">Project Name:</label>
+            <p id="ProjectName" class="form-text">@Model.Projects.ProjectName</p>
+        </div>
+
+        <div class="form-group">
+            <label for="Description" class="styled-label">Description:</label>
+            <p id="Description" class="form-text">@Model.Projects.Description</p>
+        </div>
+
+        <div class="form-group">
+            <label for="CreatedDate" class="styled-label">Created Date:</label>
+            <p id="CreatedDate" class="form-text">@Model.Projects.CreatedDate</p>
+        </div>
+
+        <div class="form-group">
+            <label for="CreatedByUsername" class="styled-label">Created By:</label>
+            <p id="CreatedByUsername" class="form-text">@Model.CreatedByUsername</p>
+        </div>
+
+        <div class="form-group">
+            <label for="LastModifiedDate" class="styled-label">Last Modified Date:</label>
+            <p id="LastModifiedDate" class="form-text">@Model.Projects.LastModifiedDate</p>
+        </div>
+
+        <div class="form-group">
+            <label for="Status" class="styled-label">Status:</label>
+            <p id="Status" class="form-text">@Model.Projects.Status</p>
+        </div>
+
+        <div class="form-group">
+            <label for="Priority" class="styled-label">Priority:</label>
+            <p id="Priority" class="form-text">@Model.Projects.Priority</p>
+        </div>
+
+        <div class="form-group">
+            <label for="ProjectManagerUsername" class="styled-label">Project Manager:</label>
+            <p id="ProjectManagerUsername" class="form-text">@Model.ProjectManagerUsername</p>
+        </div>
+    </fieldset>
+</div>
+
+<style>
+    .project-details {
+        margin: 20px;
+    }
+
+    .styled-fieldset {
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+    .styled-legend {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #1ab188;
+        padding: 0 10px;
+    }
+
+    .styled-label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-text {
+        font-size: 1em;
+        color: #666;
+        margin: 5px 0 15px;
+    }
+</style>

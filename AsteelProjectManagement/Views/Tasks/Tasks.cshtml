@@ -1,0 +1,239 @@
+﻿@model IEnumerable<AsteelProjectManagement.Models.Tasks>
+@{
+    bool isProjectManager = ViewBag.IsProjectManager as bool? ?? false;
+    var users = ViewBag.Users as List<AsteelProjectManagement.Models.Users>;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tasks List</title>
+    <style>
+
+        h2 {
+            text-align: center;
+            color: #1ab188;
+            margin-bottom: 20px;
+        }
+
+        h5 {
+            text-align: center;
+            color: #1ab188;
+            margin-bottom: 20px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .table th, .table td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .table th {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+
+            .table td {
+                color: #666;
+            }
+
+        .deleted {
+            height: 30px;
+            width: 30px;
+        }
+        .delete {
+            height: 35px;
+            width: 35px;
+        }
+        .Action{
+    
+         text-align:center        }
+        .line {
+            border: none;
+            border-top: 1px solid black; /* Couleur de la ligne */
+            margin: 10px 0; /* Espace autour de la ligne */
+        }
+
+    </style>
+</head>
+<body>
+    <h2>Tasks</h2>
+<hr class="line">    <button class="btn btn-primary" data-toggle="modal" data-target="#editModal">Create</button>|
+
+    <button class="btn btn-success" onclick="location.href='@Url.Action("Assign", "Tasks")'">Assign Task</button>
+<br />    <table class="table">
+        <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Created Date</th>
+                <th>Assigned to</th>
+                <th>Due Date</th>
+                <th>Priority</th>
+                <th>Completed Date</th>
+               <th class="Action">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in Model)
+            {
+                <tr>
+                    <td>@task.TaskName</td>
+                    <td>@task.Description</td>
+                    <td>@task.Status</td>
+                    <td>@task.CreatedDate</td>
+                    <td>
+                        @{
+                            var assignedUser = users.FirstOrDefault(u => u.UserID == task.AssignedTo);
+                            if (assignedUser != null)
+                            {
+                                <span>@assignedUser.Username</span>
+                            }
+                            else
+                            {
+                                <span>This Task is not assigned </span>
+                            }
+                        }
+                    </td>
+                    <td>@task.DueDate</td>
+                    <td>@task.Priority</td>
+                    <td>@task.CompletedDate</td>
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                            <button type="button" class="btn" data-toggle="modal" data-target="#editTaskModal" data-id="@task.TaskID" style="margin-right: 10px;">
+                                <img class="deleted" src="https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png" alt="Edit Task" />
+                            </button>
+
+                            @using (Html.BeginForm("Delete", "Tasks", FormMethod.Post, new { @class = "delete-form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("taskId", task.TaskID)
+                                <button type="submit" class="btn btn-link p-0">
+                                    <img class="delete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="Delete Task" />
+                                </button>
+                            }
+                        </div>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Create Task</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="editModalContent">
+                        <!-- Content loaded via AJAX will appear here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="editTaskModalContent">
+                        <!-- Content loaded via AJAX will appear here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate.unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+$('#editModal').on('show.bs.modal', function (event) {
+    var modal = $(this);
+    var modalBody = modal.find('.modal-body');
+
+    // Make an AJAX request to get the form content
+    $.ajax({
+        url: '@Url.Action("CreateTask", "Tasks")',
+        type: 'GET',
+        success: function (data) {
+            // Populate the modal body with the form HTML
+            modalBody.html(data);
+
+            // Attach submit handler to the form
+            $('#createTaskForm').on('submit', function (e) {
+                e.preventDefault(); // Prevent default form submission
+
+                var form = $(this);
+                var formData = form.serialize(); // Serialize form data
+
+                $.ajax({
+                    url: form.attr('action'), // Use the form's action attribute for the URL
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            // Handle successful form submission
+                            window.location.href = response.redirectUrl; // Redirect to the Tasks view
+                            $('#editModal').modal('hide'); // Hide the modal
+                            // Optionally, reload the page or update the view
+                        } else {
+                            // Handle validation errors
+                            var errorMessage = response.errorMessage;
+                            var errors = response.errors;
+                            alert('Error: ' + errorMessage + '\n' + errors.join('\n'));
+                        }
+                    },
+                    error: function () {
+                        alert('An error occurred while creating the task.');
+                    }
+                });
+            });
+        },
+        error: function () {
+            modalBody.html('<p class="text-danger">Error loading form.</p>');
+        }
+    });
+});
+
+
+
+        $('#editTaskModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var taskId = button.data('id'); // Extract info from data-* attributes
+            var modal = $(this);
+            var modalBody = modal.find('.modal-body');
+
+            // Clear previous content
+            modalBody.html('');
+
+            // Make an AJAX request to get the task details and populate the form
+            $.ajax({
+                url: '@Url.Action("EditTask", "Tasks")/' + taskId,
+                type: 'GET',
+                success: function (data) {
+                    modalBody.html(data); // Populate the modal body with the data returned from the server
+                },
+                error: function () {
+                    modalBody.html('<p class="text-danger">Error loading task details.</p>');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

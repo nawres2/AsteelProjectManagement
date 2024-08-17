@@ -1,0 +1,90 @@
+﻿@model IEnumerable<AsteelProjectManagement.Models.Comments>
+@{
+    var projectId = ViewBag.ProjectID;
+}
+
+<div class="container">
+    <fieldset class="styled-fieldset">
+        <legend class="styled-legend">Comment Details for Project ID: @projectId</legend>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var comment in Model)
+            {
+                <div class="row comment-details">
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <label class="styled-label">Project Name</label>
+                            <p class="form-control-static styled-paragraph">@comment.Projects.ProjectName</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="styled-label">Created By</label>
+                            <p class="form-control-static styled-paragraph">@comment.Users.Username</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="styled-label">Content</label>
+                            <p class="form-control-static styled-paragraph">@comment.Content</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="styled-label">Created Date</label>
+                            <p class="form-control-static styled-paragraph">@comment.CreatedDate</p>
+                        </div>
+                       
+                    </div>
+                </div>
+                <hr class="styled-hr" />
+            }
+        }
+        else
+        {
+            <p class="no-comments">No comments available for Project ID: @projectId.</p>
+        }
+    </fieldset>
+</div>
+
+<style>
+    .container {
+        margin: 20px;
+    }
+
+    .styled-fieldset {
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+    .styled-legend {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #1ab188;
+        padding: 0 10px;
+    }
+
+    .comment-details {
+        margin-bottom: 20px;
+    }
+
+    .styled-label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .styled-paragraph {
+        font-size: 1em;
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+    .styled-hr {
+        border: 0;
+        border-top: 1px solid #ddd;
+        margin: 20px 0;
+    }
+
+    .no-comments {
+        font-size: 1.2em;
+        color: #999;
+        text-align: center;
+    }
+</style>

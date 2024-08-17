@@ -1,0 +1,39 @@
+﻿@model AsteelProjectManagement.Models.StepperViewModel
+
+@{
+    ViewData["Title"] = "Edit Project";
+}
+
+<h1>Edit Project</h1>
+
+<form asp-action="Edit" method="post">
+    <div class="form-group">
+        @Html.LabelFor(m => m.Project.ProjectName)
+        @Html.TextBoxFor(m => m.Project.ProjectName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Project.ProjectName)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Project.Description)
+        @Html.TextBoxFor(m => m.Project.Description, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Project.Description)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Project.LastModifiedDate)
+        @Html.TextBoxFor(m => m.Project.LastModifiedDate, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Project.LastModifiedDate)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Project.Status)
+        @Html.TextBoxFor(m => m.Project.Status, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Project.Status)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Project.Priority)
+        @Html.TextBoxFor(m => m.Project.Priority, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Project.Priority)
+    </div>
+ 
+
+ 
+</form>

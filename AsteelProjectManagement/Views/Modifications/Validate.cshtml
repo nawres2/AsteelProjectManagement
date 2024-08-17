@@ -1,0 +1,55 @@
+﻿@model IEnumerable<AsteelProjectManagement.Models.ModificationRequests>
+
+
+
+<style>
+    .button-container {
+        display: flex;
+        gap: 10px; /* Optionnel: ajoute un espace entre les boutons */
+    }
+  
+</style>
+
+<h2>Validate requests modifications</h2>
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th class="th">Project name </th>
+            <th class="th"> User name </th>
+            <th class="th">Description</th>
+            <th class="th">Created date </th>
+            <th class="th"> Notes</th>
+            <th class="th">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var request in Model)
+        {
+            <tr>
+                <td>@request.Projects.ProjectName</td> <!-- Assuming Project model has a Name property -->
+                <td>@request.Users.Username</td>
+                <td>@request.Description</td>
+                <td>@request.RequestedDate</td>
+                <td>
+                    <textarea name="modificationNotes" placeholder="Notes de modification"></textarea>
+                </td>
+                <td>
+                    <div class="button-container">
+                        @using (Html.BeginForm("AcceptRequest", "Modifications", FormMethod.Post))
+                        {
+                            @Html.Hidden("requestID", request.RequestID)
+                            <button type="submit" class="btn btn-success">Accept</button>
+                        }
+                        @using (Html.BeginForm("RejectRequest", "Modifications", FormMethod.Post))
+                        {
+                            @Html.Hidden("requestID", request.RequestID)
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

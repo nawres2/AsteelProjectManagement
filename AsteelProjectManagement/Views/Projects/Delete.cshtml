@@ -1,0 +1,14 @@
+﻿@model AsteelProjectManagement.Models.Projects
+
+<div>
+    <p>Are you sure you want to delete the project "@Model.ProjectName"?</p>
+</div>
+
+@using (Html.BeginForm("Delete", "Projects", new { id = Model.ProjectID }, FormMethod.Post, new { @class = "form-inline" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+    </div>
+}

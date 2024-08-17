@@ -1,0 +1,93 @@
+﻿@model IEnumerable<AsteelProjectManagement.Models.Attachments>
+@{
+    var projectId = ViewBag.ProjectID;
+}
+
+<div class="container">
+    <fieldset class="styled-fieldset">
+        <legend class="styled-legend">Attachment Details for Project ID: @projectId</legend>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var attachment in Model)
+            {
+                <div class="row attachment-details">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="styled-label"> Project Name</label>
+                            <p class="form-control-static styled-paragraph">@attachment.Projects.ProjectName</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="styled-label">File Path</label>
+                            <p class="form-control-static styled-paragraph">@attachment.FilePath</p>
+                        </div>  <div class="form-group">
+                            <label class="styled-label">Description</label>
+                            <p class="form-control-static styled-paragraph">@attachment.Description</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="styled-label">Uploaded Date</label>
+                            <p class="form-control-static styled-paragraph">@attachment.UploadedDate</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="styled-label">Uploaded By</label>
+                            <p class="form-control-static styled-paragraph">@attachment.Users.Username</p>
+                        </div>
+                    </div>
+                </div>
+                <hr class="styled-hr" />
+            }
+        }
+        else
+        {
+            <p class="no-attachments">No attachments available for Project ID: @projectId.</p>
+        }
+    </fieldset>
+</div>
+
+<style>
+    .container {
+        margin: 20px;
+    }
+
+    .styled-fieldset {
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+    .styled-legend {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #1ab188;
+        padding: 0 10px;
+    }
+
+    .attachment-details {
+        margin-bottom: 20px;
+    }
+
+    .styled-label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .styled-paragraph {
+        font-size: 1em;
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+    .styled-hr {
+        border: 0;
+        border-top: 1px solid #ddd;
+        margin: 20px 0;
+    }
+
+    .no-attachments {
+        font-size: 1.2em;
+        color: #999;
+        text-align: center;
+    }
+</style>

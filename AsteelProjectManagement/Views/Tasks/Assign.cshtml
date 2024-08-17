@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "Assign Tasks";
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+   
+
+        h2 {
+            text-align: center;
+            color: #1ab188;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            color: #128f78;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #1ab188;
+            border-color: #1ab188;
+        }
+
+            .btn-primary:hover {
+                background-color: #128f78;
+                border-color: #128f78;
+            }
+
+    </style>
+</head>
+<body>
+    <h2>Assign Tasks</h2>
+
+    @using (Html.BeginForm("Assign", "Tasks", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            @Html.Label("Select Task")
+            @Html.DropDownList("taskId", ViewBag.Tasks as SelectList, "Select a Task", new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Assign to")
+            @Html.DropDownList("userId", ViewBag.Users as SelectList, "Select a User", new { @class = "form-control" })
+        </div>
+
+        <button type="submit" class="btn btn-primary">Assign Task</button>
+    }
+
+
+</body>
+</html>

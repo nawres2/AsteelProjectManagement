@@ -1,0 +1,48 @@
+﻿@model AsteelProjectManagement.Models.Comments
+    <style>
+
+        .form-card h3 {
+            color: #007bff;
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .form-control {
+            border-radius: 0.25rem;
+            box-shadow: none;
+            border-color: #ced4da;
+        }
+
+            .form-control:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+            }
+
+        .text-danger {
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .btn-primary {
+            background-color: #1ab188;
+            border-color: #1ab188;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #004085;
+            }
+    </style>
+<div class="containeer mt-5">
+    <div class="form-card p-4 shadow-sm rounded">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Content, new { @class = "form-label" })
+            @Html.TextAreaFor(m => m.Content, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Content, "", new { @class = "text-danger" })
+        </div>
+      
+        </div></div>
+

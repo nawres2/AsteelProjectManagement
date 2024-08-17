@@ -1,0 +1,20 @@
+﻿@model AsteelProjectManagement.Models.StepperViewModel
+
+@{
+    ViewData["Title"] = "Edit Comments";
+}
+
+<h1>Edit Comments</h1>
+
+<form asp-action="Edit" method="post">
+    <div class="form-group">
+        @Html.LabelFor(m => m.Comment.Content)
+        @Html.TextBoxFor(m => m.Comment.Content, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Comment.Content)
+    </div>
+  
+
+
+
+
+</form>

@@ -1,0 +1,97 @@
+﻿@model IEnumerable<AsteelProjectManagement.Models.Links>
+
+<div class="container">
+    <fieldset class="styled-fieldset">
+        <legend class="styled-legend">Link Details</legend>
+
+        @if (Model != null && Model.Any())
+        {
+            foreach (var link in Model)
+            {
+                <div class="link-details">
+                    <div class="form-group">
+                        <label for="ProjectID" class="styled-label">Project Name:</label>
+                        <p id="ProjectName" class="styled-paragraph">@link.Projects.ProjectName</p> <!-- Assuming there is a navigation property 'Projects' in 'Links' model -->
+                    </div>
+
+                    <div class="form-group">
+                        <label for="URL" class="styled-label">URL:</label>
+                        <p id="URL" class="styled-paragraph">@Html.DisplayFor(modelItem => link.URL)</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Description" class="styled-label">Description:</label>
+                        <p id="Description" class="styled-paragraph">@Html.DisplayFor(modelItem => link.Description)</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="CreatedDate" class="styled-label">Created Date:</label>
+                        <p id="CreatedDate" class="styled-paragraph">@Html.DisplayFor(modelItem => link.CreatedDate)</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="CreatedBy" class="styled-label">Created By:</label>
+                        <p id="CreatedBy" class="styled-paragraph">@link.Users.Username</p> <!-- Assuming there is a navigation property 'Users' in 'Links' model -->
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Category" class="styled-label">Category:</label>
+                        <p id="Category" class="styled-paragraph">@Html.DisplayFor(modelItem => link.Category)</p>
+                    </div>
+                </div>
+                <hr class="styled-hr" />
+            }
+        }
+        else
+        {
+            <p class="no-links">No links available.</p>
+        }
+    </fieldset>
+</div>
+
+<style>
+    .container {
+        margin: 20px;
+    }
+
+    .styled-fieldset {
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+    .styled-legend {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #1ab188;
+        padding: 0 10px;
+    }
+
+    .link-details {
+        margin-bottom: 20px;
+    }
+
+    .styled-label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .styled-paragraph {
+        font-size: 1em;
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+    .styled-hr {
+        border: 0;
+        border-top: 1px solid #ddd;
+        margin: 20px 0;
+    }
+
+    .no-links {
+        font-size: 1.2em;
+        color: #999;
+        text-align: center;
+    }
+</style>

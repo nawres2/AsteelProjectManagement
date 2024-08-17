@@ -1,0 +1,69 @@
+﻿@model AsteelProjectManagement.Models.Users
+
+@{
+    ViewBag.Title = "Edit Profile";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/Content/Profile/EditProfile.css">
+    <title>Edit Profile</title>
+</head>
+<body>
+    <div class="profile-edit">
+        <h2>Edit Profile</h2>
+        @using (Html.BeginForm("EditProfil", "EditProfil", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                @Html.LabelFor(m => m.Username)
+                @Html.EditorFor(m => m.Username)
+                @Html.ValidationMessageFor(m => m.Username)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.FirstName)
+                @Html.EditorFor(m => m.FirstName)
+                @Html.ValidationMessageFor(m => m.FirstName)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.LastName)
+                @Html.EditorFor(m => m.LastName)
+                @Html.ValidationMessageFor(m => m.LastName)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Email)
+                @Html.EditorFor(m => m.Email)
+                @Html.ValidationMessageFor(m => m.Email)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Role)
+                @Html.EditorFor(m => m.Role)
+                @Html.ValidationMessageFor(m => m.Role)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.DateJoined)
+                @Html.EditorFor(m => m.DateJoined)
+                @Html.ValidationMessageFor(m => m.DateJoined)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.PasswordHash)
+                @Html.PasswordFor(m => m.PasswordHash)
+                @Html.ValidationMessageFor(m => m.PasswordHash)
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        }
+    </div>
+</body>
+</html>

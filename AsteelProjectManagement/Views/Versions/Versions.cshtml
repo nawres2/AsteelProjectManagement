@@ -1,0 +1,92 @@
+﻿@model AsteelProjectManagement.Models.Versions
+
+<style>
+    /* General Styling */
+    .form-card h3 {
+        color: #007bff;
+    }
+
+    .form-label {
+        font-weight: bold;
+        color: #495057;
+    }
+
+    .form-control {
+        border-radius: 0.25rem;
+        box-shadow: none;
+        border-color: #ced4da;
+    }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+        }
+
+    .text-danger {
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .btn-primary {
+        background-color: #1ab188;
+        border-color: #1ab188;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+</style>
+
+@using (Html.BeginForm("Versions", "Versions", FormMethod.Post, new { id = "addVersionForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container mt-5">
+        <div class="form-card p-4 shadow-sm rounded">
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SourcePath, new { @class = "form-label" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.SourcePath, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SourcePath, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DestinationPath, new { @class = "form-label" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.DestinationPath, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DestinationPath, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ReleaseDate, new { @class = "form-label" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ReleaseDate, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ReleaseDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CreatedBy, new { @class = "form-label" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.CreatedBy, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CreatedBy, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Notes, new { @class = "form-label" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.Notes, new { @class = "form-control", rows = 4 })
+                        @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Access Denied";
+}
+
+<html>
+<head>
+    <title>Access Denied</title>
+    <script type="text/javascript">
+        window.onload = function () {
+            alert("Vous n'êtes pas autorisé à accéder à cette page.");
+            // Rediriger après l'alerte si nécessaire
+            window.location.href = '@Url.Action("Tasks", "Tasks")';
+        }
+    </script>
+</head>
+<body>
+    <!-- Le contenu HTML peut être laissé vide car le message d'alerte sera affiché par JavaScript -->
+</body>
+</html>

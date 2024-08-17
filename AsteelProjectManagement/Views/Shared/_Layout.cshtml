@@ -1,0 +1,175 @@
+﻿@using AsteelProjectManagement.Models
+
+@using System.Security.Claims
+@{
+    var userName = User.Identity.Name; // Get the username from the current user
+    var userRole = ""; // Variable to hold the user's role
+
+    // Fetch the user's role from the database
+    using (var db = new PrjContext())
+    {
+        var user = db.Users.SingleOrDefault(u => u.Username == userName);
+        if (user != null)
+        {
+            var roleAssignment = user.UserRoleAssignments.SingleOrDefault();
+            if (roleAssignment != null)
+            {
+                userRole = roleAssignment.RoleID.ToString();
+            }
+        }
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Project Manager</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        /* Styles pour la barre de navigation circulaire avec ombre */
+        .navbar-custom {
+            background-color: #343a40;
+            border-radius: 50px; /* Rend la barre de navigation circulaire */
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* Ombre douce */
+            transition: all 0.3s ease;
+        }
+
+            .navbar-custom:hover {
+                background-color: #495057;
+            }
+
+            .navbar-custom .nav-link {
+                color: #ffffff;
+                padding: 0.5rem 1rem;
+                transition: color 0.3s ease;
+            }
+
+                .navbar-custom .nav-link:hover {
+                    color: #f8f9fa;
+                }
+
+            .navbar-custom .navbar-text {
+                color: #ffffff;
+                margin-right: 1rem;
+                transition: color 0.3s ease;
+            }
+
+                .navbar-custom .navbar-text:hover {
+                    color: #f8f9fa;
+                }
+
+            .navbar-custom .btn-logout {
+                color: #ffffff;
+                border: none;
+                background: none;
+                cursor: pointer;
+                transition: color 0.3s ease;
+            }
+
+                .navbar-custom .btn-logout:hover {
+                    color: #f8f9fa;
+                }
+
+        /* Style pour l'icône du toggler */
+        .navbar-toggler-icon {
+            /* Retirez la couleur de fond */
+            background-color: transparent;
+            /* Ajoutez d'autres styles au besoin */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span> <!-- Icône du toggler -->
+            </button>
+
+            <!-- Bouton avec icône et texte -->
+            <button class="btn btn-outline-light btn-icon" type="button">
+                <i class="bi bi-box-arrow-in-left"></i> <!-- Icône de Bootstrap Icons -->
+                <span>Project Manager</span> <!-- Texte du bouton -->
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        @Html.ActionLink("Projects", "Index", "Projects", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Notification", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+                    <ul class="navbar-nav">
+                        @if (userRole == "1") // Affiche des éléments pour les développeurs
+                        {
+                            <li class="nav-item">
+                                @Html.ActionLink("Modification", "Create", "Modifications", new { area = "" }, new { @class = "nav-link" })
+                            </li>
+                        }
+                        @if (userRole == "2") // Affiche des éléments pour les chefs de projet
+                        {
+                            <li class="nav-item">
+                                @Html.ActionLink("Validate", "Validate", "Modifications", new { area = "" }, new { @class = "nav-link" })
+                            </li>
+                        }
+                    </ul>
+
+
+                    <li class="nav-item">
+                        @Html.ActionLink("Profil", "Profil", "Profil", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("EditProfil", "EditProfil", "EditProfil", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Tasks", "Tasks", "Tasks", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <span class="navbar-text">Bonjour, @User.Identity.Name</span>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="btn btn-logout" onclick="location.href='@Url.Action("LogOff", "Account")'">Déconnexion</button>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Connexion", "Login", "Account", new { area = "" }, new { @class = "nav-link" })
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Project Manager</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#notification').addClass('show');
+            }, 2000);
+        });
+    </script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

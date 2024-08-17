@@ -1,0 +1,104 @@
+﻿@model AsteelProjectManagement.Models.Tasks
+
+@{
+    var statusList = ViewBag.StatusList as SelectList;
+    var priorityList = ViewBag.PriorityList as SelectList;
+}
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-group .text-danger {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .form-group button {
+            background-color: #1ab188;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+            .form-group button:hover {
+                background-color: #128f78;
+            }
+
+    .modal-body {
+        width: 400px;
+        height: auto;
+    }
+</style>
+<div class="modal-body">
+    @using (Html.BeginForm("EditTask", "Tasks", FormMethod.Post, new { id = "updateTaskForm" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.TaskID)
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.TaskName)
+            @Html.TextBoxFor(m => m.TaskName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.TaskName)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Description)
+            @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Description)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Status)
+            @Html.DropDownListFor(m => m.Status, statusList, "Select a statut", new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(m => m.Status)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.DueDate)
+            @Html.TextBoxFor(m => m.DueDate, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.DueDate)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Priority)
+            @Html.DropDownListFor(m => m.Priority, priorityList, "Select a priority", new { @class = "form-control" })
+            
+            @Html.ValidationMessageFor(m => m.Priority)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.CompletedDate)
+            @Html.TextBoxFor(m => m.CompletedDate, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.CompletedDate)
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Update Task</button>
+        </div>
+    }
+</div>

@@ -1,0 +1,46 @@
+﻿@model AsteelProjectManagement.Models.Modifications
+
+@{
+    ViewBag.Title = "Review Modification Request";
+}
+
+<h2>Review Modification Request</h2>
+
+<div>
+    <h4>Modification Request</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Project</dt>
+        <dd>@Model.Projects.ProjectName</dd>
+
+        <dt>Version</dt>
+        <dd>@Model.Versions.VersionNumber</dd>
+
+        <dt>Description</dt>
+        <dd>@Model.Modification.Description</dd>
+
+        <dt>Requester</dt>
+        <dd>@Model.Users.Username</dd>
+
+        <dt>Reviewed By</dt>
+        <dd>@Model.Users.Username</dd>
+
+        <dt>Status</dt>
+        <dd>@Model.Modification.Status</dd>
+    </dl>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <input type="hidden" name="id" value="@Model.Modification.RequestID" />
+        <button type="submit" name="status" value="Approved" class="btn btn-primary">Approve</button>
+        <button type="submit" name="status" value="Rejected" class="btn btn-danger">Reject</button>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index", "Projects")
+</div>

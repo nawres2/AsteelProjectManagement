@@ -1,0 +1,28 @@
+﻿@model AsteelProjectManagement.Models.StepperViewModel
+
+@{
+    ViewData["Title"] = "Edit Link";
+}
+
+<h1>Edit Link</h1>
+
+<form asp-action="Edit" method="post">
+    <div class="form-group">
+        @Html.LabelFor(m => m.Link.URL)
+        @Html.TextBoxFor(m => m.Link.URL, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Link.URL)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Link.Description)
+        @Html.TextBoxFor(m => m.Link.Description, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Link.Description)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Link.Category)
+        @Html.TextBoxFor(m => m.Link.Category, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Link.Category)
+    </div>
+   
+
+
+</form>
