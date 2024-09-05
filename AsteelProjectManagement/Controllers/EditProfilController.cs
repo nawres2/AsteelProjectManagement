@@ -14,10 +14,8 @@ namespace AsteelProjectManagement.Controllers
         [HttpGet]
         public ActionResult EditProfil()
         {
-            // Vérifier si l'utilisateur est connecté
             if (Session["UserID"] == null)
             {
-                Debug.WriteLine("Session UserID is null. Redirecting to login.");
                 return RedirectToAction("Login", "Account");
             }
 
@@ -26,55 +24,56 @@ namespace AsteelProjectManagement.Controllers
 
             if (user == null)
             {
-                Debug.WriteLine($"User with ID {userId} not found.");
                 return HttpNotFound();
             }
 
-            return View(user);
+            var model = new EditProfileViewModel
+            {
+                UserID = user.UserID,
+                Username = user.Username,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Role = user.Role,
+                DateJoined = user.DateJoined,
+                PasswordHash = user.PasswordHash
+            };
+
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditProfil(Users updatedUser)
+        public ActionResult EditProfil(EditProfileViewModel updatedUser)
         {
-            // Vérifier si l'utilisateur est connecté
             if (Session["UserID"] == null)
             {
-                Debug.WriteLine("Session UserID is null. Redirecting to login.");
                 return RedirectToAction("Login", "Account");
             }
 
             int userId = (int)Session["UserID"];
             Users user = _context.Users.Find(userId);
 
-            if (user != null)
+            if (user != null && ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                user.Username = updatedUser.Username;
+                user.FirstName = updatedUser.FirstName;
+                user.LastName = updatedUser.LastName;
+                user.Email = updatedUser.Email;
+                user.Role = updatedUser.Role;
+                user.DateJoined = updatedUser.DateJoined;
+
+                if (!string.IsNullOrEmpty(updatedUser.PasswordHash))
                 {
-                    user.Username = updatedUser.Username;
-                    user.FirstName = updatedUser.FirstName;
-                    user.LastName = updatedUser.LastName;
-                    user.Email = updatedUser.Email;
-                    user.Role = updatedUser.Role;
-                    user.DateJoined = updatedUser.DateJoined;
-
-                    if (!string.IsNullOrEmpty(updatedUser.PasswordHash))
-                    {
-                        user.PasswordHash = HashPassword(updatedUser.PasswordHash);
-                    }
-
-                        return RedirectToAction("Profil", "Profil");
-                    
-
-                   
+                    user.PasswordHash = HashPassword(updatedUser.PasswordHash);
                 }
+
+                _context.SaveChanges();
             }
-            else
-            {
-                Debug.WriteLine($"User with ID {userId} not found.");
-            }
+
             return View(updatedUser);
         }
+
 
         private string HashPassword(string password)
         {

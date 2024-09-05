@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -27,7 +28,7 @@ namespace AsteelProjectManagement.Controllers
             bool isProjectManager = db.UserRoleAssignments.Any(ura => ura.UserID == userId && ura.RoleID == 2);
 
             // Récupérez toutes les notifications
-            var notifications = db.Notifications.ToList();
+            var notifications = db.Notifications.Where(n => n.UserID == userId).ToList();
 
             if (isProjectManager)
             {
@@ -44,7 +45,39 @@ namespace AsteelProjectManagement.Controllers
         }
 
 
+        public ActionResult DeleteOldNotifications()
+        {
+            try
+            {
+                // Date limite pour les notifications
+                var dateLimit = DateTime.Now.AddDays(-15);
 
+                // Récupérez les notifications obsolètes
+                var oldNotifications = db.Notifications.Where(n => n.CreatedDate < dateLimit).ToList();
+
+                // Vérifiez combien de notifications seront supprimées
+                if (oldNotifications.Count == 0)
+                {
+                    // Aucune notification obsolète trouvée
+                    ViewBag.Message = "Aucune notification obsolète trouvée.";
+                }
+                else
+                {
+                    // Supprimez les notifications obsolètes
+                    db.Notifications.RemoveRange(oldNotifications);
+                    db.SaveChanges();
+                    ViewBag.Message = $"Supprimé {oldNotifications.Count} notifications obsolètes.";
+                }
+            }
+            catch (Exception ex)
+            {
+                // Gérer les exceptions et enregistrer les erreurs si nécessaire
+                ViewBag.Message = "Erreur lors de la suppression des notifications : " + ex.Message;
+            }
+
+            // Redirigez vers une vue ou une autre action après la suppression
+            return View(); // Assurez-vous de créer une vue pour afficher les messages ou utilisez une redirection
+        }
 
 
         public ActionResult MarkAsRead(int? id)

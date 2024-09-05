@@ -1,11 +1,11 @@
 ﻿@model AsteelProjectManagement.Models.Projects
 <style>
     /* General Styling */
- 
 
-        .form-card h3 {
-            color: #007bff;
-        }
+
+    .form-card h3 {
+        color: #007bff;
+    }
 
     .form-label {
         font-weight: bold;
@@ -37,44 +37,55 @@
             background-color: #0056b3;
             border-color: #004085;
         }
-
 </style>
-<div class="containeer mt-5">
-    <div class="form-card p-4 shadow-sm rounded">
+<form id="step1Form" method="post" action="/Projects/Create">
+    <div class="containeer mt-5">
+        <div class="form-card p-4 shadow-sm rounded">
+            <div class="form-group">
+                @Html.LabelFor(m => m.ProjectName, new { @class = "form-label" })
+                @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.ProjectName, "", new { @class = "text-danger" })
+            </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.ProjectName, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.ProjectName, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(m => m.Description, new { @class = "form-label" })
+                @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Status, new { @class = "form-label" })
+                @Html.DropDownListFor(m => m.Status,
+                    new SelectList(new List<SelectListItem>
+                    {
+                        new SelectListItem { Value = "", Text = "Select Status" },
+                        new SelectListItem { Value = "Not Started", Text = "Not Started" },
+                        new SelectListItem { Value = "In Progress", Text = "In Progress" },
+                        new SelectListItem { Value = "Completed", Text = "Completed" }
+                    }, "Value", "Text"),
+                    new { @class = "form-control" }
+                )
+                @Html.ValidationMessageFor(m => m.Status, "", new { @class = "text-danger" })
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Priority, new { @class = "form-label" })
+                @Html.DropDownListFor(m => m.Priority,
+                    new SelectList(new List<SelectListItem>
+                    {
+                        new SelectListItem { Value = "", Text = "Select Priority" },
+                        new SelectListItem { Value = "Low", Text = "Low" },
+                        new SelectListItem { Value = "Medium", Text = "Medium" },
+                        new SelectListItem { Value = "High", Text = "High" }
+                    }, "Value", "Text"),
+                    new { @class = "form-control" }
+                )
+                @Html.ValidationMessageFor(m => m.Priority, "", new { @class = "text-danger" })
+            </div>
+
+
+
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(m => m.Description, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
-        </div>
-
-     
-        <div class="form-group">
-            @Html.LabelFor(m => m.Status, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.Status, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Status, "", new { @class = "text-danger" })
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(m => m.Priority, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.Priority, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Priority, "", new { @class = "text-danger" })
-        </div>
-
-        @Html.HiddenFor(m => m.ProjectManagerID)
-
-        <!-- Visible field for Project Manager Name (Optional) -->
-        <div class="form-group">
-            @Html.LabelFor(m => m.ProjectManagerID, "Project Manager", new { @class = "form-label" })
-            <input type="text" class="form-control" value="@User.Identity.Name" disabled />
-        </div>
-
-
     </div>
-</div>
+</form>

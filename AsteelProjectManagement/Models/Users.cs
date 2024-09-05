@@ -56,10 +56,6 @@ namespace AsteelProjectManagement.Models
         public DateTime? DateJoined { get; set; }
 
         public bool? IsActive { get; set; }
-        public string ProfilePhotoUrl { get; set; }
-
-        [Required]
-        [StringLength(255)]
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Attachments> Attachments { get; set; }

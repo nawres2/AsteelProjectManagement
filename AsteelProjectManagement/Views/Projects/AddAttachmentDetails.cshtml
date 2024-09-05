@@ -5,49 +5,88 @@
 
 <div class="container">
     <fieldset class="styled-fieldset">
-        <legend class="styled-legend">Attachment Details for Project ID: @projectId</legend>
+        <legend class="styled-legend">Attachment Details</legend>
+
         @if (Model != null && Model.Any())
         {
             foreach (var attachment in Model)
             {
                 <div class="row attachment-details">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="styled-label"> Project Name</label>
-                            <p class="form-control-static styled-paragraph">@attachment.Projects.ProjectName</p>
-                        </div>
+                    <div class="row">
+                        <div class="projet11">
+                            <div class="form-group">
+                                <label class="styled-label">Project Name:</label>
+                                <p class="styled-paragraph">@attachment.Projects.ProjectName</p>
+                            </div>
 
-                        <div class="form-group">
-                            <label class="styled-label">File Path</label>
-                            <p class="form-control-static styled-paragraph">@attachment.FilePath</p>
-                        </div>  <div class="form-group">
-                            <label class="styled-label">Description</label>
-                            <p class="form-control-static styled-paragraph">@attachment.Description</p>
-                        </div>
-                        <div class="form-group">
-                            <label class="styled-label">Uploaded Date</label>
-                            <p class="form-control-static styled-paragraph">@attachment.UploadedDate</p>
-                        </div>
+                            <div class="form-group">
+                                <label class="styled-label">File Path:</label>
+                                <p class="styled-paragraph">@attachment.FilePath</p>
+                            </div>
 
-                        <div class="form-group">
-                            <label class="styled-label">Uploaded By</label>
-                            <p class="form-control-static styled-paragraph">@attachment.Users.Username</p>
+                            <div class="form-group">
+                                <label class="styled-label">Description:</label>
+                                <p class="styled-paragraph">@attachment.Description</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="styled-label">Uploaded Date:</label>
+                                <p class="styled-paragraph">@attachment.UploadedDate</p>
+                            </div>
+                        </div>
+                        <div class="projettt">
+                            <div class="form-group">
+                                <label class="styled-label">Uploaded By:</label>
+                                <p class="styled-paragraph">@attachment.Users.Username</p>
+                            </div>
+                        </div>
                         </div>
                     </div>
-                </div>
-                <hr class="styled-hr" />
-            }
-        }
-        else
-        {
-            <p class="no-attachments">No attachments available for Project ID: @projectId.</p>
-        }
-    </fieldset>
+                    <hr class="styled-hr" />
+                    }
+                    }
+                    else
+                    {
+                    <p class="no-attachments">No attachments available for Project ID: @projectId.</p>
+                    }
+</fieldset>
 </div>
-
+<div class="return-link-container">
+    @Html.ActionLink("Back to list ", "Index", "Projects", null, new { @class = "btn btn-secondary return-link" })
+</div>
 <style>
+    .return-link-container {
+        margin-top: 20px;
+        text-align: right;
+    }
+
+    .return-link {
+        font-family: 'Segoe UI', sans-serif;
+        padding: 8px 16px;
+        border-radius: 5px;
+    }
+
+        .return-link:hover {
+            background-color: #6c757d;
+            color: white;
+        }
     .container {
         margin: 20px;
+    }
+    .row {
+        display: flex;
+        gap: 20px; /* Espace entre les deux div */
+    }
+
+    .projet11 {
+        flex: 1;
+        /* Ajout d'un style si nécessaire */
+    }
+
+    .projettt {
+        flex: 1;
+        margin-left: 50px;
+        margin-top: -00px;
     }
 
     .styled-fieldset {
@@ -65,7 +104,15 @@
     }
 
     .attachment-details {
+        display: flex;
+        flex-wrap: wrap;
         margin-bottom: 20px;
+    }
+
+    .col-md-6 {
+        flex: 1;
+        padding: 10px;
+        box-sizing: border-box;
     }
 
     .styled-label {
@@ -90,4 +137,5 @@
         color: #999;
         text-align: center;
     }
+
 </style>

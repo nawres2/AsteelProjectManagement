@@ -54,12 +54,23 @@
             @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
         </div>
-   
+
         <div class="form-group">
-            @Html.LabelFor(m => m.Category , new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.Category, new { @class = "form-control" })
+            @Html.LabelFor(m => m.Category, new { @class = "form-label" })
+            @Html.DropDownListFor(m => m.Category,
+                new SelectList(new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "", Text = "Select Category" },
+                    new SelectListItem { Value = "Low", Text = "Low" },
+                    new SelectListItem { Value = "Medium", Text = "Medium" },
+                    new SelectListItem { Value = "High", Text = "High" }
+                    // Add more categories as needed
+                }, "Value", "Text"),
+                new { @class = "form-control" }
+            )
             @Html.ValidationMessageFor(m => m.Category, "", new { @class = "text-danger" })
         </div>
 
-</div></div>
+
+    </div></div>
 

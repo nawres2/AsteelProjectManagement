@@ -7,10 +7,16 @@
         display: flex;
         gap: 10px; /* Optionnel: ajoute un espace entre les boutons */
     }
+    .h2 {
+        font-family: 'Segoe UI', sans-serif;
+        font-weight: bold;
+        color: #1ab188;
+        margin-bottom: 15px;
+    }
   
 </style>
 
-<h2>Validate requests modifications</h2>
+<h2 style=" font-family: 'Segoe UI', sans-serif; font-weight: bold; color: #1ab188; margin-bottom: 15px;">Validate requests modifications</h2>
 <hr />
 
 <table class="table">
@@ -33,7 +39,7 @@
                 <td>@request.Description</td>
                 <td>@request.RequestedDate</td>
                 <td>
-                    <textarea name="modificationNotes" placeholder="Notes de modification"></textarea>
+                    <textarea name="modificationNotes" ></textarea>
                 </td>
                 <td>
                     <div class="button-container">

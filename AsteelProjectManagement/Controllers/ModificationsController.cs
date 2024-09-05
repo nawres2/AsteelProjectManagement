@@ -32,6 +32,8 @@ namespace AsteelProjectManagement.Controllers
             var projects = db.Projects.Select(p => new { p.ProjectID, p.ProjectName }).ToList();
             var versions = db.Versions.Select(v => new { v.VersionID, v.VersionNumber }).ToList();
             var users = db.Users.Select(u => new { u.UserID, u.Username }).ToList();
+         
+);
 
             ViewBag.ProjectID = new SelectList(projects, "ProjectID", "ProjectName");
             ViewBag.VersionID = new SelectList(versions, "VersionID", "VersionName");
@@ -41,21 +43,37 @@ namespace AsteelProjectManagement.Controllers
         }
 
         // POST: ModificationRequest/Create
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProjectID,VersionID,Description,RequesterID")] ModificationRequests modificationRequest)
+        public ActionResult Create([Bind(Include = "ProjectID,VersionID,Description")] ModificationRequests modificationRequest)
         {
             if (ModelState.IsValid)
             {
+       
+   
+
+                var userName = User.Identity.Name;
+                var user = db.Users.SingleOrDefault(u => u.Username == userName);
+                if (user == null)
+                {
+                    // Si l'utilisateur n'est pas trouvé, gérer l'erreur
+                    return RedirectToAction("Error", "Home");
+                }
+                var userId = user.UserID;
+
+                // Assigner l'ID de l'utilisateur comme RequesterID
+                modificationRequest.RequesterID = userId;
                 modificationRequest.RequestedDate = DateTime.Now;
                 modificationRequest.Status = "En attente";
+
                 db.ModificationRequests.Add(modificationRequest);
                 db.SaveChanges();
 
-                // Create and send notification to Project Manager and store NotificationIDs
+                // Créer et envoyer une notification au Chef de Projet et stocker les NotificationIDs
                 var notificationIds = SendNotificationToProjectManager(modificationRequest);
 
-                // Store the notification IDs in TempData to use later
+                // Stocker les NotificationIDs dans TempData pour une utilisation ultérieure
                 TempData["NotificationIds"] = notificationIds;
 
                 return RedirectToAction("Index", "Projects");
@@ -63,6 +81,7 @@ namespace AsteelProjectManagement.Controllers
 
             return View(modificationRequest);
         }
+
         private string GetRequesterName(int requesterID)
         {
             var requester = db.Users.FirstOrDefault(u => u.UserID == requesterID);

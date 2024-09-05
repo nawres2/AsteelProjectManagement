@@ -31,6 +31,9 @@ namespace AsteelProjectManagement.Models
 
         public string ModificationNotes { get; set; }
 
+        public string Modification { get; set; }
+
+
         public virtual Projects Projects { get; set; }
 
         public virtual Users Users { get; set; }

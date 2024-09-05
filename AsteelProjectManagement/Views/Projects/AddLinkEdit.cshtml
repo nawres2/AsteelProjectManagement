@@ -1,28 +1,37 @@
-﻿@model AsteelProjectManagement.Models.StepperViewModel
+﻿@model AsteelProjectManagement.Models.Links
 
 @{
     ViewData["Title"] = "Edit Link";
 }
 
-<h1>Edit Link</h1>
 
 <form asp-action="Edit" method="post">
     <div class="form-group">
-        @Html.LabelFor(m => m.Link.URL)
-        @Html.TextBoxFor(m => m.Link.URL, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Link.URL)
+        @Html.LabelFor(m => m.URL)
+        @Html.TextBoxFor(m => m.URL, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.URL)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Link.Description)
-        @Html.TextBoxFor(m => m.Link.Description, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Link.Description)
+        @Html.LabelFor(m => m.Description)
+        @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Description)
     </div>
+
     <div class="form-group">
-        @Html.LabelFor(m => m.Link.Category)
-        @Html.TextBoxFor(m => m.Link.Category, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Link.Category)
+        @Html.LabelFor(m => m.Category, new { @class = "form-label" })
+        @Html.DropDownListFor(m => m.Category,
+            new SelectList(new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "Select Category" },
+                new SelectListItem { Value = "Low", Text = "Low" },
+                new SelectListItem { Value = "Medium", Text = "Medium" },
+                new SelectListItem { Value = "High", Text = "High" }
+                // Add more categories as needed
+            }, "Value", "Text"),
+            new { @class = "form-control" }
+        )
+        @Html.ValidationMessageFor(m => m.Category, "", new { @class = "text-danger" })
     </div>
-   
 
 
 </form>

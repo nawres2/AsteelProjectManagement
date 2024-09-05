@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using Microsoft.AspNet.Identity;
 
 namespace AsteelProjectManagement.Controllers
 {
@@ -18,13 +19,31 @@ namespace AsteelProjectManagement.Controllers
 
         public ActionResult Tasks()
         {
-            var tasks = db.Tasks.Include(t => t.Projects).Include(t => t.Users).ToList();
-            var users = db.Users.ToList();
+            // Assurez-vous que l'utilisateur est authentifié
+            if (Session["UserID"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
+            int userId = (int)Session["UserID"];
+
+            // Récupération du rôle de l'utilisateur depuis la table UserRoleAssignments
+            var userRole = db.UserRoleAssignments
+                             .Where(ura => ura.UserID == userId)
+                             .Select(ura => ura.RoleID)
+                             .FirstOrDefault();
+
+            // Récupération des tâches et des utilisateurs associés
+            var tasks = db.Tasks.Include(t => t.Projects).Include(t => t.Users).ToList();
+            var users = db.Users.ToList(); // Assurez-vous que la liste des utilisateurs est récupérée
+
+            // Passer les données à la vue
+            ViewBag.UserRoleId = userRole;
             ViewBag.Users = users;
 
             return View(tasks);
         }
+
 
 
         public ActionResult CreateTask()
@@ -136,6 +155,7 @@ namespace AsteelProjectManagement.Controllers
                     task.DueDate = model.DueDate;
                     task.Priority = model.Priority;
                     task.CompletedDate = model.CompletedDate;
+                    task.AssignedTo = model.AssignedTo;
 
                     db.Entry(task).State = EntityState.Modified;
                     db.SaveChanges();
@@ -166,15 +186,29 @@ namespace AsteelProjectManagement.Controllers
             bool isProjectManager = db.UserRoleAssignments
                 .Any(ra => ra.UserID == userId && ra.RoleID == 2); // RoleID 2 pour Chef de Projet
 
+            if (!isProjectManager)
+            {
+                // Optionnel: Rediriger ou afficher un message si l'utilisateur n'est pas un Chef de Projet
+                return RedirectToAction("Index", "Home");
+            }
 
-            var tasks = db.Tasks.ToList(); // Tâches non assignées
-            var users = db.Users.ToList(); // Récupérer les utilisateurs
+            // Récupérer les tâches
+            var tasks = db.Tasks.ToList();
 
+            // Récupérer les utilisateurs qui ont le rôle de développeur (RoleID 1)
+            var developerRoleId = 1;
+            var users = db.UserRoleAssignments
+                           .Where(ura => ura.RoleID == developerRoleId)
+                           .Select(ura => ura.Users)
+                           .ToList();
+
+            // Préparer les listes pour les vues
             ViewBag.Tasks = new SelectList(tasks, "TaskID", "TaskName");
-            ViewBag.Users = new SelectList(users, "UserID", "UserName"); // Assurez-vous que les clés sont correctes
+            ViewBag.Users = new SelectList(users, "UserID", "UserName");
 
             return View();
         }
+
 
         // POST: Tasks/Assign
         [HttpPost]
@@ -196,8 +230,23 @@ namespace AsteelProjectManagement.Controllers
             var task = db.Tasks.Find(taskId);
             if (task != null)
             {
+                // Assigner la tâche à l'utilisateur
                 task.AssignedTo = userId;
                 db.SaveChanges();
+
+                // Créer une notification pour l'utilisateur assigné
+                var notification = new Notifications
+                {
+                    UserID = userId,
+                    Message = $"You are assigned to the task '{task.TaskName}'.",
+                    IsRead = false,
+                    CreatedDate = DateTime.Now,
+                    Type = "Assignment"
+                };
+
+                db.Notifications.Add(notification);
+                db.SaveChanges();
+
                 return RedirectToAction("Tasks");
             }
 
@@ -207,6 +256,7 @@ namespace AsteelProjectManagement.Controllers
 
             return View();
         }
+
 
         private int GetCurrentUserId()
         {

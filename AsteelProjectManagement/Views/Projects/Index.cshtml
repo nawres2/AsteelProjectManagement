@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<AsteelProjectManagement.Models.Projects>
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,9 +55,9 @@
             }
 
         .grid-container {
-            grid-template-columns: repeat(auto-fit, minmax(300px, 400px));
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             grid-gap: 20px;
-            display: flex;
         }
 
         .grid-item {
@@ -64,8 +66,6 @@
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             transition: box-shadow 0.3s ease-in-out;
-            width:400px; 
-            flex: 1;
         }
 
             .grid-item:hover {
@@ -136,12 +136,11 @@
         <div class="page-title" onclick="this.innerHTML = 'Projects Management'">
             AsteelFlash
         </div>
-
         <p>
-            <button onclick="location.href='@Url.Action("Stepper", "Projects")'" class="btn-create">Create New</button>|
-
-
-
+            @if (ViewBag.UserRoleId == 1)
+            {
+                <button onclick="location.href='@Url.Action("Stepper", "Projects")'" class="btn-create">Create New</button>
+            }
         </p>
 
         <div class="grid-container">
@@ -156,13 +155,16 @@
                         <p><strong>Status:</strong> @Html.DisplayFor(modelItem => item.Status)</p>
                         <p><strong>Priority:</strong> @Html.DisplayFor(modelItem => item.Priority)</p>
                         <p>
-                                                       @Html.ActionLink("EDIT", "Edit", new { id = item.ProjectID }, new { @class = "btn btn-primary" } )|
+                            @if (ViewBag.UserRoleId == 1)
+                            {
 
+                                @Html.ActionLink("EDIT", "Edit", new { id = item.ProjectID }, new { @class = "btn btn-primary" })
 
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-id="@item.ProjectID">Delete</button>|
+                                
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-id="@item.ProjectID">Delete</button>
+                            }
 
-
-                            @Html.ActionLink("Details", "Details", new { id = item.ProjectID }, new { @class = "btn btn-info" }) 
+                            @Html.ActionLink("Details", "Details", new { id = item.ProjectID }, new { @class = "btn btn-info" })
 
 
 
@@ -172,7 +174,6 @@
                 </div>
             }
         </div>
-        @* Modal Structure *@
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -191,52 +192,63 @@
 
 
 
-
-
+    </div>
 
         <!-- add attachment -->
 
 
-    </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <script>
-  
-                      $('#deleteModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var projectId = button.data('id'); // Extract info from data-* attributes
-            var modal = $(this);
-            var modalBody = modal.find('.modal-body');
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-            modalBody.html('');
+        <script>
 
-            // Make an AJAX request to load delete confirmation modal content
-            $.ajax({
-                url: '@Url.Action("Delete", "Projects")/' + projectId,
-                type: 'GET',
-                success: function (data) {
-                    modalBody.html(data); // Populate modal body with delete confirmation form
-                },
-                error: function () {
-                    modalBody.html('<p class="text-danger">Error loading delete confirmation.</p>');
-                }
-            });
-                      });
+$('#deleteModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var projectId = button.data('id'); // Extract info from data-* attributes
+    var modal = $(this);
+    var modalBody = modal.find('.modal-body');
+    var modalHeader = modal.find('.modal-dialog'); // Select modal header
+
+    modalBody.html('');
+    modalHeader.hide(); // Hide the modal header
+
+    // Make an AJAX request to load delete confirmation modal content
+    $.ajax({
+        url: '@Url.Action("Delete", "Projects")',
+        data: { id: projectId },
+        type: 'GET',
+        success: function (data) {
+            if (data.redirect) {
+                // Redirect if redirect URL is provided
+                window.location.href = data.redirect;
+            } else if (data.showModal) {
+                // Show the modal with the provided HTML if showModal is true
+                modalBody.html(data.html);
+                modalHeader.show(); // Show the modal header
+                modal.modal('show');
+            } else {
+                // Ensure the modal is completely hidden if showModal is false
+                modal.modal('hide');
+            }
+        },
+        error: function () {
+            modalBody.html('<p class="text-danger">Error loading delete confirmation.</p>');
+            modal.modal('hide');
+        }
+    });
+});
+
+$('#deleteModal').on('hidden.bs.modal', function () {
+    // Clean up modal content after hiding
+    var modal = $(this);
+    modal.find('.modal-header').show(); // Ensure the header is shown for future uses
+    modal.find('.modal-body').html(''); // Clear modal body content
+});
 
 
 
-
-
-
-
-
-
-
-
-
-
-    </script>
+        </script>
 </body>
 </html >

@@ -120,10 +120,7 @@
 
 
                     <li class="nav-item">
-                        @Html.ActionLink("Profil", "Profil", "Profil", new { area = "" }, new { @class = "nav-link" })
-                    </li>
-                    <li class="nav-item">
-                        @Html.ActionLink("EditProfil", "EditProfil", "EditProfil", new { area = "" }, new { @class = "nav-link" })
+                        @Html.ActionLink("Edit Profil", "EditProfil", "EditProfil", new { area = "" }, new { @class = "nav-link" })
                     </li>
                     <li class="nav-item">
                         @Html.ActionLink("Tasks", "Tasks", "Tasks", new { area = "" }, new { @class = "nav-link" })
@@ -133,16 +130,16 @@
                     @if (Request.IsAuthenticated)
                     {
                         <li class="nav-item">
-                            <span class="navbar-text">Bonjour, @User.Identity.Name</span>
+                            <span class="navbar-text">Hello, @User.Identity.Name</span>
                         </li>
                         <li class="nav-item">
-                            <button type="button" class="btn btn-logout" onclick="location.href='@Url.Action("LogOff", "Account")'">Déconnexion</button>
+                            <button type="button" class="btn btn-logout" onclick="location.href='@Url.Action("LogOff", "Account")'">log out</button>
                         </li>
                     }
                     else
                     {
                         <li class="nav-item">
-                            @Html.ActionLink("Connexion", "Login", "Account", new { area = "" }, new { @class = "nav-link" })
+                            @Html.ActionLink("LogIn", "Login", "Account", new { area = "" }, new { @class = "nav-link" })
                         </li>
                     }
                 </ul>

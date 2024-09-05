@@ -1,37 +1,28 @@
-﻿@model AsteelProjectManagement.Models.StepperViewModel
+﻿@model AsteelProjectManagement.Models.Versions
 
 @{
     ViewData["Title"] = "Edit Link";
 }
 
-<h1>Edit Link</h1>
 
 <form asp-action="Edit" method="post">
     <div class="form-group">
-        @Html.LabelFor(m => m.Version.SourcePath)
-        @Html.TextBoxFor(m => m.Version.SourcePath, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Version.SourcePath)
+        @Html.LabelFor(m => m.SourcePath)
+        @Html.TextBoxFor(m => m.SourcePath, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.SourcePath)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Version.DestinationPath)
-        @Html.TextBoxFor(m => m.Version.DestinationPath, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Version.DestinationPath)
+        @Html.LabelFor(m => m.DestinationPath)
+        @Html.TextBoxFor(m => m.DestinationPath, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.DestinationPath)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Version.Notes)
-        @Html.TextBoxFor(m => m.Version.Notes, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Version.Notes)
+        @Html.LabelFor(m => m.Notes)
+        @Html.TextBoxFor(m => m.Notes, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Notes)
     </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Version.ModifiedBy)
-        @Html.TextBoxFor(m => m.Version.ModifiedBy, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Version.ModifiedBy)
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Version.ModifiedDate)
-        @Html.TextBoxFor(m => m.Version.ModifiedDate, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Version.ModifiedDate)
-    </div>
+  
+   
 
 
 

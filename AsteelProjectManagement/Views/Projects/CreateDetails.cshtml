@@ -1,63 +1,90 @@
 ﻿@model AsteelProjectManagement.Models.ProjectViewModel
+<fieldset class="styled-fieldset">
+    <legend class="styled-legend">Project Details</legend>
 
+        <div class="row">
+            <div class="projet11">
+                <div class="form-group">
+                    <label for="ProjectName" class="styled-label">Project Name:</label>
+                    <p id="ProjectName" class="form-text">@Model.Projects.ProjectName</p>
+                </div>
+                <div class="form-group">
+                    <label for="Description" class="styled-label">Description:</label>
+                    <p id="Description" class="form-text">@Model.Projects.Description</p>
+                </div>
+                <div class="form-group">
+                    <label for="CreatedDate" class="styled-label">Created Date:</label>
+                    <p id="CreatedDate" class="form-text">@Model.Projects.CreatedDate</p>
+                </div>
+                <div class="form-group">
+                    <label for="CreatedByUsername" class="styled-label">Created By:</label>
+                    <p id="CreatedByUsername" class="form-text">@Model.CreatedByUsername</p>
+                </div>
+                <div class="form-group">
+                    <label for="LastModifiedDate" class="styled-label">Last Modified Date:</label>
+                    <p id="LastModifiedDate" class="form-text">@Model.Projects.LastModifiedDate</p>
+                </div>
+            </div>
 
-
-<div class="project-details">
-    <fieldset class="styled-fieldset">
-        <legend class="styled-legend">Project Details</legend>
-
-        <div class="form-group">
-            <label for="ProjectName" class="styled-label">Project Name:</label>
-            <p id="ProjectName" class="form-text">@Model.Projects.ProjectName</p>
+            <div class="projettt">
+                <div class="form-group">
+                    <label for="Status" class="styled-label">Status:</label>
+                    <p id="Status" class="form-text">@Model.Projects.Status</p>
+                </div>
+                <div class="form-group">
+                    <label for="Priority" class="styled-label">Priority:</label>
+                    <p id="Priority" class="form-text">@Model.Projects.Priority</p>
+                </div>
+                <div class="form-group">
+                    <label for="ProjectManagerUsername" class="styled-label">Project Manager:</label>
+                    <p id="ProjectManagerUsername" class="form-text">@Model.ProjectManagerUsername</p>
+                </div>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label for="Description" class="styled-label">Description:</label>
-            <p id="Description" class="form-text">@Model.Projects.Description</p>
-        </div>
-
-        <div class="form-group">
-            <label for="CreatedDate" class="styled-label">Created Date:</label>
-            <p id="CreatedDate" class="form-text">@Model.Projects.CreatedDate</p>
-        </div>
-
-        <div class="form-group">
-            <label for="CreatedByUsername" class="styled-label">Created By:</label>
-            <p id="CreatedByUsername" class="form-text">@Model.CreatedByUsername</p>
-        </div>
-
-        <div class="form-group">
-            <label for="LastModifiedDate" class="styled-label">Last Modified Date:</label>
-            <p id="LastModifiedDate" class="form-text">@Model.Projects.LastModifiedDate</p>
-        </div>
-
-        <div class="form-group">
-            <label for="Status" class="styled-label">Status:</label>
-            <p id="Status" class="form-text">@Model.Projects.Status</p>
-        </div>
-
-        <div class="form-group">
-            <label for="Priority" class="styled-label">Priority:</label>
-            <p id="Priority" class="form-text">@Model.Projects.Priority</p>
-        </div>
-
-        <div class="form-group">
-            <label for="ProjectManagerUsername" class="styled-label">Project Manager:</label>
-            <p id="ProjectManagerUsername" class="form-text">@Model.ProjectManagerUsername</p>
-        </div>
-    </fieldset>
+</fieldset>
+<div class="return-link-container">
+    @Html.ActionLink("Back to list ", "Index", "Projects", null, new { @class = "btn btn-secondary return-link" })
 </div>
 
 <style>
-    .project-details {
-        margin: 20px;
+    .return-link-container {
+        margin-top: 20px;
+        text-align: right;
     }
 
-    .styled-fieldset {
+    .return-link {
+        font-family: 'Segoe UI', sans-serif;
+        padding: 8px 16px;
+        border-radius: 5px;
+    }
+
+        .return-link:hover {
+            background-color: #6c757d;
+            color: white;
+        }
+    .row {
+        display: flex;
+        gap: 20px; /* Espace entre les deux div */
+    }
+
+    .projet11, .projet {
+        flex: 1;
+        /* Ajout d'un style si nécessaire */
+    }
+    .projettt {
+        flex: 1;
+        margin-left: 50px;
+        margin-top: -00px;
+    }
+    
+
+    .col-md-6 {
+        margin: 20px;
         border: 1px solid #ddd;
         padding: 20px;
         border-radius: 8px;
         background-color: #f9f9f9;
+        width: 80%; /* Augmentez ou réduisez ce pourcentage pour ajuster la taille */
     }
 
     .styled-legend {
@@ -78,3 +105,4 @@
         margin: 5px 0 15px;
     }
 </style>
+

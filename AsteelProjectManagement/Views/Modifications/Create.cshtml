@@ -1,64 +1,60 @@
 ﻿@model AsteelProjectManagement.Models.ModificationRequests
 
 @{
-    ViewBag.Title = "Faire une demande de modification";
+    ViewBag.Title = "Modification request";
 }
 
-<h2>Faire une demande de modification</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>ModificationRequest</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<div class="form-horizontal form-container">
+    <h2 class="form-title">Modification Request</h2>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger validation-summary" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ProjectID, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.ProjectID, (SelectList)ViewBag.ProjectID, "Select Project", new { @class = "form-control", @id = "ProjectID" })
-                @Html.ValidationMessageFor(model => model.ProjectID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.VersionID, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.VersionID, Enumerable.Empty<SelectListItem>(), "Select Version", new { @class = "form-control", @id = "VersionID" })
-                @Html.ValidationMessageFor(model => model.VersionID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.RequesterID, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.RequesterID, (SelectList)ViewBag.RequesterID, "Select Requester", new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.RequesterID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = 5 })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Soumettre" class="btn btn-default" />
-            </div>
+    <div class="form-group">
+        @Html.Label("Project Name", htmlAttributes: new { @class = "control-label col-md-2 label-custom" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.ProjectID, (SelectList)ViewBag.ProjectID, "Select Project", new { @class = "form-control custom-input", @id = "ProjectID" })
+            @Html.ValidationMessageFor(model => model.ProjectID, "", new { @class = "text-danger validation-message" })
         </div>
     </div>
+
+    <div class="form-group">
+        @Html.Label(" Version Number", htmlAttributes: new { @class = "control-label col-md-2 label-custom" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.VersionID, Enumerable.Empty<SelectListItem>(), "Select Version", new { @class = "form-control custom-input", @id = "VersionID" })
+            @Html.ValidationMessageFor(model => model.VersionID, "", new { @class = "text-danger validation-message" })
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2 label-custom" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.Description, new { @class = "form-control custom-textarea", rows = 5 })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger validation-message" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Submit" class="btn btn-primary custom-submit" />
+        </div>
+    </div>
+</div>
 }
 
-<div>
-    @Html.ActionLink("Retour à la liste", "Index", "Projects")
+<div class="return-link-container">
+    @Html.ActionLink("Back to list ", "Index", "Projects", null, new { @class = "btn btn-secondary return-link" })
 </div>
 
 @section scripts {
@@ -71,7 +67,7 @@
                     $.getJSON('@Url.Action("GetVersionsByProject")', { projectId: projectId }, function (data) {
                         var items = '<option>Select Version</option>';
                         $.each(data, function (i, version) {
-                            items += "<option value='" + version.VersionID + "'>" + version.VersionNumber + "</option>"; // Ensure these properties match the ones in your JSON response
+                            items += "<option value='" + version.VersionID + "'>" + version.VersionNumber + "</option>";
                         });
                         $('#VersionID').html(items);
                     });
@@ -83,3 +79,70 @@
     </script>
 }
 
+<style>
+    .form-container {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    .form-title {
+        font-family: 'Segoe UI', sans-serif;
+        font-weight: bold;
+        color: #1ab188;
+        margin-bottom: 15px;
+    }
+
+    .label-custom {
+        font-weight: bold;
+        color: #333;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .custom-input, .custom-textarea {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 16px;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .custom-submit {
+        background-color: #1ab188;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        font-family: 'Segoe UI', sans-serif;
+        transition: background-color 0.3s ease;
+    }
+
+        .custom-submit:hover {
+            background-color: #128f78;
+        }
+
+    .validation-message {
+        color: #ff4d4d;
+        font-family: 'Segoe UI', sans-serif;
+        font-size: 14px;
+    }
+
+    .return-link-container {
+        margin-top: 20px;
+        text-align: right;
+    }
+
+    .return-link {
+        font-family: 'Segoe UI', sans-serif;
+        padding: 8px 16px;
+        border-radius: 5px;
+    }
+
+        .return-link:hover {
+            background-color: #6c757d;
+            color: white;
+        }
+</style>

@@ -11,7 +11,7 @@ namespace AsteelProjectManagement.Controllers
     {
         private PrjContext db = new PrjContext();
 
-        public ActionResult AddComment(Comments comment)
+        public ActionResult Comments(Comments comment)
 
         // GET: Comments
         {

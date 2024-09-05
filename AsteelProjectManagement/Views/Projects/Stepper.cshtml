@@ -19,10 +19,7 @@
             transition: transform 0.3s, box-shadow 0.3s;
         }
 
-            .container:hover {
-                transform: scale(1.02);
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            }
+       
 
         .stepper {
             display: flex;
@@ -287,7 +284,7 @@
             <div class="step-pane" data-step="5">
                 <h3>Create Comment</h3>
                 <form id="step5-form">
-                    @Html.Partial("~/Views/Comments/Comments.cshtml", Model.Comment)
+                    @Html.Partial("~/Views/Projects/Comments.cshtml", Model.Comment)
                     <button type="button" class="btn btn-secondary previous-step">Back</button>
                     <button type="button" class="btn btn-primary next-step">Continue</button>
                 </form>
@@ -297,127 +294,208 @@
                 <form id="step6-form">
                     <!-- Add any final steps or confirmations here -->
                     <button type="button" class="btn btn-secondary previous-step">Back</button>
-                    <button type="button" class="btn btn-success" onclick="submitForms()">Finish</button>
+                    <button type="button" class="btn btn-success finish-step" onclick="submitForms()">Finish</button>
                 </form>
             </div>
         </div>
     </div>
-
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
-$(document).ready(function () {
-    var stepper = $('.stepper');
-    var stepContents = $('.step-content .step-pane');
+        $(document).ready(function () {
+            let projectId; // Variable to store the project ID
 
-    $.fn.activateStep = function (stepNumber, callback) {
-        var step = stepper.find('.step').filter('[data-step="' + stepNumber + '"]');
-        step.addClass('active').siblings().removeClass('active');
-        stepContents.removeClass('active').filter('[data-step="' + stepNumber + '"]').addClass('active');
-        if (callback) callback();
-    };
+            function showStep(stepNumber) {
+                $('.step-pane').removeClass('active');
+                $('[data-step=' + stepNumber + ']').addClass('active');
+            }
 
-    $.fn.deactivateStep = function (callback) {
-        var step = $(this);
-        step.removeClass('active').addClass('done');
-        if (callback) callback();
-    };
+            // Handle next step
+            $('.next-step').click(function () {
+                const currentStep = $(this).closest('.step-pane').data('step');
+                const nextStep = currentStep + 1;
 
-    function validateStep(stepNumber) {
-        var form = $('#step' + stepNumber + '-form');
-        return form[0].checkValidity(); // Utiliser la validation HTML5
-    }
+                switch (currentStep) {
+                    case 1:
+                        submitStep1();
+                        break;
+                    case 2:
+                        submitStep2();
+                        break;
+                    case 3:
+                        submitStep3();
+                        break;
+                    case 4:
+                        submitStep4();
+                        break;
+                    case 5:
+                        submitStep5();
+                        break;
+                }
 
-    function goToStep(stepNumber) {
-        var currentStep = stepper.find('.step.active');
-        if (currentStep.data('step') === stepNumber) {
-            return; // Ne fais rien si tu es déjà sur cette étape
-        }
-        if (validateStep(currentStep.data('step'))) {
-            currentStep.deactivateStep(function () {
-                stepper.find('.step').filter('[data-step="' + stepNumber + '"]').activateStep(stepNumber);
+                showStep(nextStep);
             });
-        } else {
-            alert('Please complete the required fields.');
-        }
-    }
 
-    stepper.find('.step').each(function (index) {
-        if (index === 0) {
-            $(this).activateStep(1);
-        } else {
-            $(this).removeClass('active');
-        }
-    });
+            var stepper = $('.stepper');
+            var stepContents = $('.step-content .step-pane');
 
-    stepper.on('click', '.step', function () {
-        var stepNumber = $(this).data('step');
-        goToStep(stepNumber);
-    });
+            $.fn.activateStep = function (stepNumber, callback) {
+                var step = stepper.find('.step').filter('[data-step="' + stepNumber + '"]');
+                step.addClass('active').siblings().removeClass('active');
+                stepContents.removeClass('active').filter('[data-step="' + stepNumber + '"]').addClass('active');
+                if (callback) callback();
+            };
 
-    stepContents.on('click', '.next-step', function () {
-        var activeStep = stepper.find('.step.active');
-        var stepNumber = activeStep.data('step');
-        if (validateStep(stepNumber)) {
-            var nextStep = activeStep.next('.step');
-            if (nextStep.length > 0) {
-                activeStep.deactivateStep(function () {
-                    nextStep.activateStep(nextStep.data('step'));
+            $.fn.deactivateStep = function (callback) {
+                var step = $(this);
+                step.removeClass('active').addClass('done');
+                if (callback) callback();
+            };
+            function validateStep(stepNumber) {
+                var form = $('#step' + stepNumber + '-form');
+                return form[0].checkValidity(); // Utiliser la validation HTML5
+            }
+            // Handle previous step
+            $('.previous-step').click(function () {
+                const currentStep = $(this).closest('.step-pane').data('step');
+                const prevStep = currentStep - 1;
+
+                showStep(prevStep);
+            });
+
+            function submitStep1() {
+                $.ajax({
+                    url: '/Projects/SaveStep1',
+                    type: 'POST',
+                    data: $('#step1-form').serialize(),
+                    success: function (response) {
+                        console.log('Step 1 response:', response);
+                        if (response.success) {
+                            projectId = response.projectId; // Store the project ID for future steps
+                        } else {
+                            alert('Error in Step 1');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Step 1 AJAX error:', error);
+                        alert('An error occurred while saving Step 1.');
+                    }
                 });
             }
-        } else {
-            alert('Please complete the required fields.');
-        }
-    });
 
-    stepContents.on('click', '.previous-step', function () {
-        var activeStep = stepper.find('.step.active');
-        var prevStep = activeStep.prev('.step');
-        if (prevStep.length > 0) {
-            activeStep.deactivateStep(function () {
-                prevStep.activateStep(prevStep.data('step'));
-            });
-        }
-    });
-
-    stepContents.on('click', '.finish-step', function () {
-        var formData = new FormData();
-        $('#step1-form, #step2-form, #step3-form, #step4-form, #step5-form').each(function() {
-            $(this).find('input, select, textarea').each(function() {
-                formData.append(this.name, $(this).val());
-            });
-        });
-
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Action("Steppersave", "Projects")',
-            data: formData,
-            processData: false, 
-            contentType: false, // Important pour FormData
-            success: function (response) {
-                if (response.success) {
-                    window.location.href = '@Url.Action("Index", "Projects")';
-                } else {
-                    alert(response.message);
-                }
-            },
-            error: function () {
-                alert('An error occurred while saving the data.');
+            function submitStep2() {
+                $.ajax({
+                    url: '/Projects/SaveStep2',
+                    type: 'POST',
+                    data: $('#step2-form').serialize() + '&projectId=' + projectId,
+                    success: function (response) {
+                        console.log('Step 2 response:', response);
+                        if (response.success) {
+                            showStep(3);
+                        } else {
+                            alert('Error in Step 2');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Step 2 AJAX error:', error);
+                        alert('An error occurred while saving Step 2.');
+                    }
+                });
             }
-        });
-    });
+        
 
-    // Fonction de soumission des formulaires (vérifiez si nécessaire)
-    function submitForms() {
-        $('#step1-form').submit();
-        $('#step2-form').submit();
-        $('#step3-form').submit();
-        $('#step4-form').submit();
-        $('#step5-form').submit();
-    }
-});
+            function submitStep3() {
+                $.ajax({
+                    url: '/Projects/SaveStep3',
+                    type: 'POST',
+                    data: $('#step3-form').serialize() + '&projectId=' + projectId,
+                    success: function (response) {
+                        console.log('Step 3 response:', response);
+                        if (response.success) {
+                            showStep(4);
+                        } else {
+                            alert('Error in Step 3: ' + response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Step 3 AJAX error:', error);
+                        alert('An error occurred while saving Step 3: ' + xhr.responseText);
+                    }
+                });
+            }
+
+            function submitStep4() {
+                $.ajax({
+                    url: '/Projects/SaveStep4',
+                    type: 'POST',
+                    data: $('#step4-form').serialize() + '&projectId=' + projectId,
+                    success: function (response) {
+                        console.log('Step 4 response:', response);
+                        if (response.success) {
+                            showStep(5);
+                        } else {
+                            alert('Error in Step 4');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Step 4 AJAX error:', error);
+                        alert('An error occurred while saving Step 4.');
+                    }
+                });
+            }
+
+            function submitStep5() {
+                $.ajax({
+                    url: '/Projects/SaveStep5',
+                    type: 'POST',
+                    data: $('#step5-form').serialize() + '&projectId=' + projectId,
+                    success: function (response) {
+                        console.log('Step 5 response:', response);
+                        if (response.success) {
+                            showStep(6);
+                        } else {
+                            alert('Error in Step 5');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Step 5 AJAX error:', error);
+                        alert('An error occurred while saving Step 5.');
+                    }
+                });
+            }
+
+            function submitForms() {
+                $.ajax({
+                    url: '/Projects/FinalizeProcess',
+                    type: 'POST',
+                    data: { projectId: projectId },
+                    success: function (response) {
+                        if (response.success) {
+                            alert('Process completed successfully.');
+                            window.location.href = '@Url.Action("Index", "Projects")';
+
+                        } else {
+                            alert('Error finalizing process: ' + response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Finalize Process AJAX error:', error);
+                        alert('An error occurred while finalizing the process.');
+                    }
+                });
+            }
+
+            $(document).ready(function () {
+                $('.finish-step').click(function () {
+                    submitForms();
+                });
+            });
+        });
+
 
     </script>
 </body>

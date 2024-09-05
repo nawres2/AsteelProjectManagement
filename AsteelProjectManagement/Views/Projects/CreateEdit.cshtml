@@ -1,39 +1,57 @@
-﻿@model AsteelProjectManagement.Models.StepperViewModel
+﻿@model AsteelProjectManagement.Models.Projects
 
 @{
     ViewData["Title"] = "Edit Project";
 }
 
-<h1>Edit Project</h1>
 
-<form asp-action="Edit" method="post">
-    <div class="form-group">
-        @Html.LabelFor(m => m.Project.ProjectName)
-        @Html.TextBoxFor(m => m.Project.ProjectName, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Project.ProjectName)
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Project.Description)
-        @Html.TextBoxFor(m => m.Project.Description, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Project.Description)
-    </div>
+<form id="step1Form" method="post">
+
+    @Html.HiddenFor(m => m.ProjectID, new { id = "ProjectID" })
 
     <div class="form-group">
-        @Html.LabelFor(m => m.Project.LastModifiedDate)
-        @Html.TextBoxFor(m => m.Project.LastModifiedDate, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Project.LastModifiedDate)
+        @Html.LabelFor(m => m.ProjectName, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.ProjectName, "", new { @class = "text-danger" })
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Project.Status)
-        @Html.TextBoxFor(m => m.Project.Status, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Project.Status)
+        @Html.LabelFor(m => m.Description)
+        @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Description)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Project.Priority)
-        @Html.TextBoxFor(m => m.Project.Priority, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Project.Priority)
+        @Html.LabelFor(m => m.Status, new { @class = "form-label" })
+        @Html.DropDownListFor(m => m.Status,
+            new SelectList(new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "Select Status" },
+                new SelectListItem { Value = "Not Started", Text = "Not Started" },
+                new SelectListItem { Value = "In Progress", Text = "In Progress" },
+                new SelectListItem { Value = "Completed", Text = "Completed" }
+            }, "Value", "Text"),
+            new { @class = "form-control" }
+        )
+        @Html.ValidationMessageFor(m => m.Status, "", new { @class = "text-danger" })
     </div>
- 
 
- 
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Priority, new { @class = "form-label" })
+        @Html.DropDownListFor(m => m.Priority,
+            new SelectList(new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "Select Priority" },
+                new SelectListItem { Value = "Low", Text = "Low" },
+                new SelectListItem { Value = "Medium", Text = "Medium" },
+                new SelectListItem { Value = "High", Text = "High" }
+            }, "Value", "Text"),
+            new { @class = "form-control" }
+        )
+        @Html.ValidationMessageFor(m => m.Priority, "", new { @class = "text-danger" })
+    </div>
+
+
+
 </form>
+
+ 
